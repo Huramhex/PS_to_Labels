@@ -1,0 +1,41 @@
+import cv2
+import numpy as np
+import glob
+
+
+def changeImgLabel(path, cmap):
+    def matColorCode(mat):  # 颜色编码函数 牺牲内存
+        b = (mat[:, :, 0]).astype(np.uint32)  # 读取蓝通道  转成32位防止溢出
+        g = (mat[:, :, 1]).astype(np.uint32)  # 读取绿通道
+        r = (mat[:, :, 2]).astype(np.uint32)  # 读取红通道
+        return b * 256 * 256 + g * 256 + r  # 编码
+
+    cmap = cv2.imread(cmap, -1)
+    cmap = matColorCode(cmap)
+    cmap = np.unique(cmap.astype(np.uint64))
+    print('cmap', cmap)
+
+    images = glob.glob(path + '/*.png')  # 标签为PNG格式 读取这些东西就行了
+    images.sort()
+    for fileLocation in images:
+        img = cv2.imread(fileLocation, -1)
+        if img.max() > 20:  # 防止误操作
+            img = matColorCode(img)  # 接上面的函数
+        number = 0
+
+        for i in cmap:
+            img = np.where(img == i, number, img)
+            number += 1
+        img = np.where(img > number, 0, img)
+        cv2.imwrite(fileLocation, img.astype(np.uint8))
+        # 存储
+        print(fileLocation)
+
+
+if __name__ == '__main__':
+    # 颜色表存放路径
+    path = r'.\colormap\colormap.png'
+    # 标签存放路径
+    path1 = r'.\masks'
+
+    changeImgLabel(path1, cmap=path)
