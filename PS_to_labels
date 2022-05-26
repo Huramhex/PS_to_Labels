@@ -36,6 +36,6 @@ if __name__ == '__main__':
     # 颜色表存放路径
     path = r'.\colormap\colormap.png'
     # 标签存放路径
-    path1 = r'.\masks'
+    maskpath = r'.\masks'
 
-    changeImgLabel(path1, cmap=path)
+    changeImgLabel(maskpath, cmap=path)
