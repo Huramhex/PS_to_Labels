@@ -4,6 +4,10 @@ Transform PS images to masks for semantic segmentation
 
 https://codeantenna.com/a/hZypo7ZQHu
 
+图片格式
+------
+- 图像 → 模式 → RGB颜色 → 8位/通道
+
 使用工具
 --------
 - 多边形套索工具
